@@ -1,0 +1,6 @@
+[main]
+repository_dir = ~/dotfiles
+
+[mappings]
+macros = ~/.macros
+vim/vimrc = ~/.vimrc

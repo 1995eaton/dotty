@@ -1,0 +1,51 @@
+#!/usr/bin/env python3
+
+import os
+from configparser import SafeConfigParser
+import argparse
+
+CONFIG_PATH = "./config"
+
+
+class color:
+    green = '\033[92m'
+    red = '\033[31m'
+    end = '\033[0m'
+
+
+def check_path(path):
+    pass
+
+
+def load_config():
+    if not os.path.isfile(CONFIG_PATH):
+        raise Exception("Config file not found")
+    configs = SafeConfigParser()
+    configs.read(CONFIG_PATH)
+    repository_dir = os.path.expanduser(configs.get('main', 'repository_dir'))
+    if not os.path.isdir(repository_dir):
+        raise Exception("Repository directory not found.")
+    mappings = configs._sections['mappings']
+    for orig in mappings.keys():
+        abs_path = os.path.join(repository_dir, orig)
+        if not os.path.exists(abs_path):
+            print(color.red + "Warning: " + color.end +
+                  "\'" + abs_path + "\' could not be found. Skipping")
+
+
+def test():
+    print("test")
+
+
+def main():
+    parser = argparse.ArgumentParser(description='Easily manage dotfiles \
+                                     across computers with the aid of \
+                                     repository management software \
+                                     such as Git.', prefix_chars='-+')
+    parser.add_argument('-l', '--list', action=test(), nargs='?')
+    args = parser.parse_args()
+    #load_config()
+
+
+if __name__ == '__main__':
+    main()
